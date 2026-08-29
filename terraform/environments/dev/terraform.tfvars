@@ -1,0 +1,21 @@
+aws_region   = "eu-west-2"
+project_name = "cop"
+environment  = "dev"
+domain_name  = "titotest.co.uk"
+
+public_subnet_az1_cidr       = "10.0.1.0/24"
+public_subnet_az2_cidr       = "10.0.2.0/24"
+private_subnet_app_az1_cidr  = "10.0.11.0/24"
+private_subnet_app_az2_cidr  = "10.0.12.0/24"
+private_subnet_data_az1_cidr = "10.0.21.0/24"
+private_subnet_data_az2_cidr = "10.0.22.0/24"
+vpc_cidr                     = "10.0.0.0/16"
+instance_type                = "t3.micro"
+asg_min_size                 = 1
+asg_max_size                 = 2
+asg_desired                  = 1
+aws_account_id     = "716769866080"
+load_balancer_type = "application"
+target_type        = "instance"
+health_check_path  = "/"
+operator_email     = "austinbale667@gmail.com"
