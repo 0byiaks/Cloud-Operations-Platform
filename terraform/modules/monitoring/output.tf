@@ -27,3 +27,8 @@ output "ec2_system_log_group" {
   description = "CloudWatch log group for EC2 system logs"
   value       = aws_cloudwatch_log_group.ec2_system.name
 }
+
+output "dashboard_name" {
+  description = "Name of the CloudWatch dashboard"
+  value       = aws_cloudwatch_dashboard.platform_health.dashboard_name
+}

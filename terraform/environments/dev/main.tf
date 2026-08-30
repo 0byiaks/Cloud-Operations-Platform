@@ -98,4 +98,5 @@ module "monitoring" {
   alb_arn_suffix          = local.alb_arn_suffix
   target_group_arn_suffix = local.target_group_arn_suffix
   asg_name                = module.asg.asg_name
+  aws_region              = var.aws_region
 }
