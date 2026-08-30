@@ -12,3 +12,18 @@ output "ec2_cpu_alarm_arn" {
   description = "ARN of the EC2 CPU alarm"
   value       = aws_cloudwatch_metric_alarm.ec2_cpu_high.arn
 }
+
+output "nginx_access_log_group" {
+  description = "CloudWatch log group for Nginx access logs"
+  value       = aws_cloudwatch_log_group.nginx_access.name
+}
+
+output "nginx_error_log_group" {
+  description = "CloudWatch log group for Nginx error logs"
+  value       = aws_cloudwatch_log_group.nginx_error.name
+}
+
+output "ec2_system_log_group" {
+  description = "CloudWatch log group for EC2 system logs"
+  value       = aws_cloudwatch_log_group.ec2_system.name
+}

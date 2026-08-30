@@ -79,3 +79,37 @@ resource "aws_cloudwatch_metric_alarm" "ec2_cpu_high" {
     ManagedBy   = "Terraform"
   }
 }
+
+# Log groups for Nginx logs
+resource "aws_cloudwatch_log_group" "nginx_access" {
+  name              = "/cop/${var.environment}/nginx/access"
+  retention_in_days = 30
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project_name
+    ManagedBy   = "Terraform"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "nginx_error" {
+  name              = "/cop/${var.environment}/nginx/error"
+  retention_in_days = 30
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project_name
+    ManagedBy   = "Terraform"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "ec2_system" {
+  name              = "/cop/${var.environment}/ec2/system"
+  retention_in_days = 30
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project_name
+    ManagedBy   = "Terraform"
+  }
+}
