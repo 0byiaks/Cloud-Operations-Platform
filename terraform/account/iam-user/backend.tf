@@ -10,7 +10,7 @@ terraform {
 
   backend "s3" {
     bucket       = "cop-terraform-state-716769866080"
-    key          = "dev/terraform.tfstate"
+    key          = "account/iam-user/terraform.tfstate"
     region       = "eu-west-2"
     use_lockfile = true
   }
@@ -19,12 +19,4 @@ terraform {
 provider "aws" {
   region = var.aws_region
   profile = "cop-terraform"
-
-  default_tags {
-    tags = {
-      Project     = var.project_name
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  }
 }
