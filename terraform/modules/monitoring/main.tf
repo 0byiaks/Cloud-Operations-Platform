@@ -113,3 +113,128 @@ resource "aws_cloudwatch_log_group" "ec2_system" {
     ManagedBy   = "Terraform"
   }
 }
+
+# CloudWatch Dashboard
+resource "aws_cloudwatch_dashboard" "platform_health" {
+  dashboard_name = "${var.environment}-cop-platform-health"
+
+  dashboard_body = jsonencode({
+    widgets = [
+      {
+        type   = "metric"
+        x      = 0
+        y      = 0
+        width  = 12
+        height = 6
+        properties = {
+          title  = "ALB Request Count"
+          view   = "timeSeries"
+          region = var.aws_region
+          metrics = [
+            ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", var.alb_arn_suffix]
+          ]
+          period = 300
+          stat   = "Sum"
+        }
+      },
+      {
+        type   = "metric"
+        x      = 12
+        y      = 0
+        width  = 12
+        height = 6
+        properties = {
+          title  = "ALB 5XX Errors"
+          view   = "timeSeries"
+          region = var.aws_region
+          metrics = [
+            ["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", var.alb_arn_suffix]
+          ]
+          period = 300
+          stat   = "Sum"
+        }
+      },
+      {
+        type   = "metric"
+        x      = 0
+        y      = 6
+        width  = 12
+        height = 6
+        properties = {
+          title  = "ALB Unhealthy Host Count"
+          view   = "timeSeries"
+          region = var.aws_region
+          metrics = [
+            ["AWS/ApplicationELB", "UnHealthyHostCount", "LoadBalancer", var.alb_arn_suffix, "TargetGroup", var.target_group_arn_suffix]
+          ]
+          period = 300
+          stat   = "Maximum"
+        }
+      },
+      {
+        type   = "metric"
+        x      = 12
+        y      = 6
+        width  = 12
+        height = 6
+        properties = {
+          title  = "EC2 CPU Utilisation"
+          view   = "timeSeries"
+          region = var.aws_region
+          metrics = [
+            ["AWS/EC2", "CPUUtilization", "AutoScalingGroupName", var.asg_name]
+          ]
+          period = 300
+          stat   = "Average"
+        }
+      },
+      {
+  type   = "metric"
+  x      = 0
+  y      = 12
+  width  = 12
+  height = 6
+  properties = {
+    title  = "EC2 Memory Utilisation"
+    view   = "timeSeries"
+    region = var.aws_region
+    metrics = [
+      [{ "expression" = "SEARCH('{COP/EC2} MetricName=\"mem_used_percent\"', 'Average', 60)", "label" = "Memory Used %", "id" = "e1" }]
+    ]
+    period = 60
+  }
+},
+      {
+  type   = "metric"
+  x      = 12
+  y      = 12
+  width  = 12
+  height = 6
+  properties = {
+    title  = "EC2 Disk Utilisation"
+    view   = "timeSeries"
+    region = var.aws_region
+    metrics = [
+      [{ "expression" = "SEARCH('{COP/EC2,device,fstype,host,path} MetricName=\"disk_used_percent\" path=\"/\"', 'Average', 60)", "label" = "Disk Used %", "id" = "e2" }]
+    ]
+    period = 60
+  }
+},
+      {
+        type   = "alarm"
+        x      = 0
+        y      = 18
+        width  = 24
+        height = 4
+        properties = {
+          title  = "Platform Alarms"
+          alarms = [
+            aws_cloudwatch_metric_alarm.alb_5xx_errors.arn,
+            aws_cloudwatch_metric_alarm.unhealthy_host_count.arn,
+            aws_cloudwatch_metric_alarm.ec2_cpu_high.arn
+          ]
+        }
+      }
+    ]
+  })
+}

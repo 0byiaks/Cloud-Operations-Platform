@@ -27,3 +27,18 @@ output "launch_template_id" {
   description = "ID of the launch template"
   value       = module.asg.launch_template_id
 }
+
+output "alb_5xx_alarm_arn" {
+  description = "ARN of the ALB 5XX error alarm"
+  value       = module.monitoring.alb_5xx_alarm_arn
+}
+
+output "unhealthy_host_alarm_arn" {
+  description = "ARN of the unhealthy host count alarm"
+  value       = module.monitoring.unhealthy_host_alarm_arn
+}
+
+output "ec2_cpu_alarm_arn" {
+  description = "ARN of the EC2 CPU alarm"
+  value       = module.monitoring.ec2_cpu_alarm_arn
+}

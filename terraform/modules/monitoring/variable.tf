@@ -27,3 +27,8 @@ variable "asg_name" {
   description = "Name of the Auto Scaling Group"
   type        = string
 }
+
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
+}
