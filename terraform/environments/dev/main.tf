@@ -86,3 +86,16 @@ module "asg" {
   alb_target_group_arn         = module.alb.alb_target_group_arn
   sns_topic_arn                = module.route53.sns_topic_arn
 }
+
+# Monitoring
+module "monitoring" {
+  source = "../../modules/monitoring"
+
+  environment  = var.environment
+  project_name = var.project_name
+
+  sns_topic_arn           = module.route53.sns_topic_arn
+  alb_arn_suffix          = local.alb_arn_suffix
+  target_group_arn_suffix = local.target_group_arn_suffix
+  asg_name                = module.asg.asg_name
+}
