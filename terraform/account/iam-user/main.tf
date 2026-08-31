@@ -63,6 +63,14 @@ resource "aws_iam_policy" "cop_terraform_policy" {
         Resource = "*"
       },
       {
+        Sid    = "CloudTrailPermissions"
+        Effect = "Allow"
+        Action = [
+          "cloudtrail:*"
+        ]
+        Resource = "*"
+      },
+      {
         Sid    = "IAMPermissions"
         Effect = "Allow"
         Action = [
