@@ -12,6 +12,12 @@ on:
       - develop
     paths:
       - 'terraform/**'
+  workflow_dispatch:
+    inputs:
+      confirm_destroy:
+        description: 'Type "destroy-dev" to confirm you want to destroy terraform/environments/dev'
+        required: true
+        type: string
 
 # Serialize all runs that touch the same terraform/environments/dev state.
 # Without this, a push to develop and a pull_request sync on another PR
@@ -34,6 +40,7 @@ jobs:
   terraform:
     name: Terraform
     runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_dispatch'
 
     steps:
       - name: Checkout
@@ -107,6 +114,50 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform apply -lock-timeout=300s -auto-approve
+        env:
+          TF_VAR_aws_account_id: "716769866080"
+          TF_VAR_operator_email: ${{ secrets.OPERATOR_EMAIL }}
+
+  terraform-destroy:
+    name: Terraform Destroy
+    runs-on: ubuntu-latest
+    # Only runs when manually triggered via workflow_dispatch AND the
+    # confirm_destroy input exactly matches "destroy-dev". A typo or a
+    # dispatch left at its default value will not destroy anything.
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.confirm_destroy == 'destroy-dev'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Configure SSH for Terraform modules
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/terraform_git
+          chmod 600 ~/.ssh/terraform_git
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Use SSH key for Git
+        run: echo "GIT_SSH_COMMAND=ssh -i $HOME/.ssh/terraform_git -o IdentitiesOnly=yes" >> "$GITHUB_ENV"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.4
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init
+
+      - name: Terraform Destroy
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform destroy -lock-timeout=300s -auto-approve
         env:
           TF_VAR_aws_account_id: "716769866080"
           TF_VAR_operator_email: ${{ secrets.OPERATOR_EMAIL }}
