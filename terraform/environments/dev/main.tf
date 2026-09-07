@@ -91,12 +91,12 @@ module "asg" {
 module "monitoring" {
   source = "../../modules/monitoring"
 
-  environment  = var.environment
-  project_name = var.project_name
-
-  sns_topic_arn           = module.route53.sns_topic_arn
-  alb_arn_suffix          = local.alb_arn_suffix
-  target_group_arn_suffix = local.target_group_arn_suffix
-  asg_name                = module.asg.asg_name
-  aws_region              = var.aws_region
+  environment              = var.environment
+  project_name             = var.project_name
+  aws_region               = var.aws_region
+  sns_topic_arn            = module.route53.sns_topic_arn
+  alb_arn_suffix           = local.alb_arn_suffix
+  target_group_arn_suffix  = local.target_group_arn_suffix
+  asg_name                 = module.asg.asg_name
+  vpc_id                   = module.vpc.vpc_id
 }
