@@ -35,7 +35,10 @@ resource "aws_iam_role" "github_actions" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:${var.github_org}/${var.github_repo}:*"
+            # GitHub now issues OIDC subjects with immutable org/repo IDs
+            # embedded, e.g. repo:org@ORG_ID/repo@REPO_ID:pull_request
+            # (see: gh api repos/${var.github_org}/${var.github_repo}/actions/oidc/customization/sub)
+            "token.actions.githubusercontent.com:sub" = "repo:${var.github_org}@${var.github_org_id}/${var.github_repo}@${var.github_repo_id}:*"
           }
         }
       }

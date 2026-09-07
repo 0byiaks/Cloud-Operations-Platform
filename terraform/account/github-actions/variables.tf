@@ -27,3 +27,15 @@ variable "github_repo" {
   type        = string
   default     = "Cloud-Operations-Platform"
 }
+
+variable "github_org_id" {
+  description = "Immutable numeric GitHub org/user ID (see: gh api repos/OWNER/REPO/actions/oidc/customization/sub)"
+  type        = string
+  default     = "110993470"
+}
+
+variable "github_repo_id" {
+  description = "Immutable numeric GitHub repo ID (see: gh api repos/OWNER/REPO/actions/oidc/customization/sub)"
+  type        = string
+  default     = "1349535033"
+}
