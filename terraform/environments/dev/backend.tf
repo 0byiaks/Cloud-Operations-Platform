@@ -17,8 +17,9 @@ terraform {
 }
 
 provider "aws" {
-  region  = var.aws_region
-  profile = "cop-terraform"
+  region = var.aws_region
+  # No hardcoded profile: CI (GitHub Actions OIDC) supplies credentials via
+  # env vars. For local runs, export AWS_PROFILE=cop-terraform instead.
 
   default_tags {
     tags = {
