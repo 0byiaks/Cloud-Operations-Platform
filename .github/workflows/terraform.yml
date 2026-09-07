@@ -1,0 +1,96 @@
+name: Terraform
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+    paths:
+      - 'terraform/**'
+  push:
+    branches:
+      - develop
+    paths:
+      - 'terraform/**'
+
+permissions:
+  contents: read
+  id-token: write
+  pull-requests: write
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  TF_WORKING_DIR: terraform/environments/dev
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Configure SSH for Terraform modules
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/terraform_git
+          chmod 600 ~/.ssh/terraform_git
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Use SSH key for Git
+        run: echo "GIT_SSH_COMMAND=ssh -i $HOME/.ssh/terraform_git -o IdentitiesOnly=yes" >> "$GITHUB_ENV"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.4
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init
+
+      - name: Terraform Format Check
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform plan -out=tfplan
+        env:
+          TF_VAR_aws_account_id: "716769866080"
+          TF_VAR_operator_email: ${{ secrets.OPERATOR_EMAIL }}
+
+      - name: Post Plan to PR
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `#### Terraform Plan 📝
+              * Working directory: \`${{ env.TF_WORKING_DIR }}\`
+              * Triggered by: @${{ github.actor }}
+
+              Plan completed. Review before merging.`
+            })
+
+      - name: Terraform Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform apply -auto-approve
+        env:
+          TF_VAR_aws_account_id: "716769866080"
+          TF_VAR_operator_email: ${{ secrets.OPERATOR_EMAIL }}
