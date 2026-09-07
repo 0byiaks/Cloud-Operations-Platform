@@ -13,6 +13,14 @@ on:
     paths:
       - 'terraform/**'
 
+# Serialize all runs that touch the same terraform/environments/dev state.
+# Without this, a push to develop and a pull_request sync on another PR
+# targeting develop/main (e.g. a develop->main PR whose head just moved)
+# can fire concurrently and race for the S3 state lock.
+concurrency:
+  group: terraform-dev
+  cancel-in-progress: false
+
 permissions:
   contents: read
   id-token: write
@@ -74,7 +82,7 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform plan -out=tfplan
+        run: terraform plan -lock-timeout=300s -out=tfplan
         env:
           TF_VAR_aws_account_id: "716769866080"
           TF_VAR_operator_email: ${{ secrets.OPERATOR_EMAIL }}
@@ -98,7 +106,7 @@ jobs:
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform apply -auto-approve
+        run: terraform apply -lock-timeout=300s -auto-approve
         env:
           TF_VAR_aws_account_id: "716769866080"
           TF_VAR_operator_email: ${{ secrets.OPERATOR_EMAIL }}
