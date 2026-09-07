@@ -75,10 +75,10 @@ module "asg" {
   environment  = var.environment
   project_name = var.project_name
 
-  instance_type                = var.instance_type
-  min_size                     = var.asg_min_size
-  max_size                     = var.asg_max_size
-  desired_capacity             = var.asg_desired
+  instance_type    = var.instance_type
+  min_size         = var.asg_min_size
+  max_size         = var.asg_max_size
+  desired_capacity = var.asg_desired
 
   private_subnet_app_ids       = module.vpc.private_app_subnet_ids
   app_server_security_group_id = module.vpc.app_server_security_group_id
@@ -91,12 +91,12 @@ module "asg" {
 module "monitoring" {
   source = "../../modules/monitoring"
 
-  environment              = var.environment
-  project_name             = var.project_name
-  aws_region               = var.aws_region
-  sns_topic_arn            = module.route53.sns_topic_arn
-  alb_arn_suffix           = local.alb_arn_suffix
-  target_group_arn_suffix  = local.target_group_arn_suffix
-  asg_name                 = module.asg.asg_name
-  vpc_id                   = module.vpc.vpc_id
+  environment             = var.environment
+  project_name            = var.project_name
+  aws_region              = var.aws_region
+  sns_topic_arn           = module.route53.sns_topic_arn
+  alb_arn_suffix          = local.alb_arn_suffix
+  target_group_arn_suffix = local.target_group_arn_suffix
+  asg_name                = module.asg.asg_name
+  vpc_id                  = module.vpc.vpc_id
 }
