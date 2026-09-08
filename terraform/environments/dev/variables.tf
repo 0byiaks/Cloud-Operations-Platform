@@ -109,3 +109,53 @@ variable "operator_email" {
   type        = string
 
 }
+
+variable "cluster_name" {
+  description = "EKS cluster name"
+  type        = string
+}
+
+variable "cluster_version" {
+  description = "Kubernetes version"
+  type        = string
+}
+
+variable "app_node_instance_type" {
+  description = "App node instance type"
+  type        = string
+}
+
+variable "platform_node_instance_type" {
+  description = "Platform node instance type"
+  type        = string
+}
+
+variable "app_node_min" {
+  description = "App node minimum count"
+  type        = number
+}
+
+variable "app_node_max" {
+  description = "App node maximum count"
+  type        = number
+}
+
+variable "app_node_desired" {
+  description = "App node desired count"
+  type        = number
+}
+
+variable "platform_node_min" {
+  description = "Platform node minimum count"
+  type        = number
+}
+
+variable "platform_node_max" {
+  description = "Platform node maximum count"
+  type        = number
+}
+
+variable "platform_node_desired" {
+  description = "Platform node desired count"
+  type        = number
+}
