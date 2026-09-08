@@ -63,6 +63,14 @@ resource "aws_iam_policy" "cop_terraform_policy" {
         Resource = "*"
       },
       {
+        Sid    = "EKSPermissions"
+        Effect = "Allow"
+        Action = [
+          "eks:*"
+        ]
+        Resource = "*"
+      },
+      {
         Sid    = "CloudTrailPermissions"
         Effect = "Allow"
         Action = [

@@ -19,3 +19,14 @@ load_balancer_type           = "application"
 target_type                  = "instance"
 health_check_path            = "/"
 operator_email               = "austinbale667@gmail.com"
+
+cluster_name                = "cop-eks-cluster"
+cluster_version             = "1.31"
+app_node_instance_type      = "t3.medium"
+platform_node_instance_type = "t3.medium"
+app_node_min                = 1
+app_node_max                = 3
+app_node_desired            = 2
+platform_node_min           = 1
+platform_node_max           = 2
+platform_node_desired       = 1

@@ -100,3 +100,27 @@ module "monitoring" {
   asg_name                = module.asg.asg_name
   vpc_id                  = module.vpc.vpc_id
 }
+
+# EKS
+module "eks" {
+  source = "../../modules/eks"
+
+  project_name    = var.project_name
+  aws_account_id  = var.aws_account_id
+  environment     = var.environment
+  cluster_name    = var.cluster_name
+  cluster_version = var.cluster_version
+
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_app_subnet_ids
+
+  app_node_instance_type      = var.app_node_instance_type
+  platform_node_instance_type = var.platform_node_instance_type
+  app_node_min                = var.app_node_min
+  app_node_max                = var.app_node_max
+  app_node_desired            = var.app_node_desired
+  platform_node_min           = var.platform_node_min
+  platform_node_max           = var.platform_node_max
+  platform_node_desired       = var.platform_node_desired
+}
+
