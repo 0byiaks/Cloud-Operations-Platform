@@ -16,6 +16,12 @@ variable "environment" {
 
 }
 
+variable "aws_profile" {
+  description = "AWS CLI profile to use for EKS authentication"
+  type        = string
+  default     = ""
+}
+
 variable "vpc_cidr" {
   description = "VPC CIDR"
   type        = string

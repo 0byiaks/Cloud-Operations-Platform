@@ -1,6 +1,7 @@
 aws_region   = "eu-west-2"
 project_name = "cop"
 environment  = "dev"
+aws_profile  = "cop-terraform"
 domain_name  = "titotest.co.uk"
 
 public_subnet_az1_cidr       = "10.0.1.0/24"
