@@ -140,3 +140,8 @@ module "eks-platform" {
   aws_account_id = var.aws_account_id
   vpc_id         = module.vpc.vpc_id
 }
+
+import {
+  to = module.monitoring.aws_cloudwatch_log_group.vpc_flow_logs
+  id = "/cop/dev/vpc-flow-logs"
+}
