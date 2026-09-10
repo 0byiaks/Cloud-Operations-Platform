@@ -169,7 +169,10 @@ resource "helm_release" "argocd" {
     value = "true"
   }
 
-  depends_on = [kubernetes_namespace.argocd]
+  depends_on = [
+    kubernetes_namespace.argocd,
+    helm_release.aws_load_balancer_controller,
+  ]
 }
 
 # =============================================
@@ -232,4 +235,21 @@ resource "helm_release" "secrets_store_csi_driver_aws" {
   version    = "0.3.8"
 
   depends_on = [helm_release.secrets_store_csi_driver]
+}
+
+
+resource "kubernetes_cluster_role_binding" "terraform_user_admin" {
+  metadata {
+    name = "cop-terraform-user-admin"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "cluster-admin"
+  }
+  subject {
+    kind      = "User"
+    name      = "arn:aws:iam::716769866080:user/cop-terraform-user"
+    api_group = "rbac.authorization.k8s.io"
+  }
 }
