@@ -42,3 +42,27 @@ output "ec2_cpu_alarm_arn" {
   description = "ARN of the EC2 CPU alarm"
   value       = module.monitoring.ec2_cpu_alarm_arn
 }
+output "cluster_name" {
+  description = "EKS cluster name"
+  value       = module.eks.cluster_name
+}
+
+output "cluster_endpoint" {
+  description = "EKS cluster endpoint"
+  value       = module.eks.cluster_endpoint
+}
+
+output "cluster_oidc_issuer" {
+  description = "OIDC issuer URL"
+  value       = module.eks.cluster_oidc_issuer
+}
+
+output "oidc_provider_arn" {
+  description = "ARN of the EKS OIDC provider"
+  value       = module.eks.oidc_provider_arn
+}
+
+output "node_role_arn" {
+  description = "ARN of the node IAM role"
+  value       = module.eks.node_role_arn
+}
