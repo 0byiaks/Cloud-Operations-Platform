@@ -124,3 +124,19 @@ module "eks" {
   platform_node_desired       = var.platform_node_desired
 }
 
+# EKS-Platform
+module "eks-platform" {
+  source = "../../modules/eks-platform"
+
+  cluster_name = module.eks.cluster_name
+  cluster_endpoint = module.eks.cluster_endpoint
+  cluster_certificate_authority = module.eks.cluster_certificate_authority
+  oidc_provider_arn = module.eks.oidc_provider_arn
+  cluster_oidc_issuer = module.eks.cluster_oidc_issuer
+  
+  environment = var.environment
+  project_name = var.project_name
+  aws_region = var.aws_region
+  aws_account_id = var.aws_account_id
+  vpc_id = module.vpc.vpc_id
+}
