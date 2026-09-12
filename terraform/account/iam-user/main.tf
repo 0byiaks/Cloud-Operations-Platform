@@ -127,6 +127,14 @@ resource "aws_iam_policy" "cop_terraform_policy" {
         ]
         Resource = "*"
       },
+            {
+        Sid    = "ECRPermissions"
+        Effect = "Allow"
+        Action = [
+          "ecr:*"
+        ]
+        Resource = "*"
+      },
       {
         Sid    = "EventBridgePermissions"
         Effect = "Allow"
