@@ -47,3 +47,14 @@ variable "environment" {
   description = "Environment name"
   type        = string
 }
+
+variable "access_entry_arns" {
+  description = "EKS access entry ARNs - Helm releases depend on these so they are destroyed before access entries"
+  type        = list(string)
+  default     = []
+}
+
+variable "oidc_issuer" {
+  description = "OIDC issuer URL for the EKS cluster"
+  type        = string
+}

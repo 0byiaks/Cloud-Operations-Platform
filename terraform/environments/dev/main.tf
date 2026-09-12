@@ -133,12 +133,18 @@ module "eks-platform" {
   cluster_certificate_authority = module.eks.cluster_certificate_authority
   oidc_provider_arn             = module.eks.oidc_provider_arn
   cluster_oidc_issuer           = module.eks.cluster_oidc_issuer
-
+  oidc_issuer                   = module.eks.oidc_issuer
   environment    = var.environment
   project_name   = var.project_name
   aws_region     = var.aws_region
   aws_account_id = var.aws_account_id
   vpc_id         = module.vpc.vpc_id
+
+   access_entry_arns = [
+    module.eks.cluster_access_entry_arn,
+    module.eks.github_actions_access_entry_arn
+  ]
+
 }
 
 import {
@@ -146,7 +152,12 @@ import {
   id = "/cop/dev/vpc-flow-logs"
 }
 
-import {
-  to = module.eks.aws_eks_access_entry.github_actions
-  id = "cop-eks-cluster:arn:aws:iam::716769866080:role/cop-github-actions-role"
+
+module "ecr" {
+  source = "../../modules/ecr"
+  repository_names = var.ecr_repository_names
+  tags = {
+    Environment = var.environment
+    Project = var.project_name
+  }
 }
