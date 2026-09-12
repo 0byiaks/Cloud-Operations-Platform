@@ -183,6 +183,10 @@ resource "aws_eks_access_entry" "terraform_user" {
   principal_arn = "arn:aws:iam::${var.aws_account_id}:user/cop-terraform-user"
   type          = "STANDARD"
 
+  lifecycle {
+    ignore_changes = all
+  }
+
   tags = {
     Project     = var.project_name
     Environment = var.environment
