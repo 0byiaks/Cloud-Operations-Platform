@@ -133,7 +133,7 @@ module "eks-platform" {
   cluster_certificate_authority = module.eks.cluster_certificate_authority
   oidc_provider_arn             = module.eks.oidc_provider_arn
   cluster_oidc_issuer           = module.eks.cluster_oidc_issuer
-
+  oidc_issuer                   = module.eks.oidc_issuer
   environment    = var.environment
   project_name   = var.project_name
   aws_region     = var.aws_region
@@ -144,16 +144,12 @@ module "eks-platform" {
     module.eks.cluster_access_entry_arn,
     module.eks.github_actions_access_entry_arn
   ]
+
 }
 
 import {
   to = module.monitoring.aws_cloudwatch_log_group.vpc_flow_logs
   id = "/cop/dev/vpc-flow-logs"
-}
-
-import {
-  to = module.eks.aws_eks_access_entry.github_actions
-  id = "cop-eks-cluster:arn:aws:iam::716769866080:role/cop-github-actions-role"
 }
 
 

@@ -70,3 +70,18 @@ output "node_role_arn" {
 output "novacorp_api_role_arn" {
   value = module.eks-platform.novacorp_api_role_arn
 }
+
+output "oidc_issuer" {
+  description = "OIDC issuer URL for IRSA"
+  value       = module.eks.oidc_issuer
+}
+
+output "cluster_access_entry_arn" {
+  description = "ID of the Terraform user EKS access entry"
+  value       = module.eks.cluster_access_entry_arn
+}
+
+output "github_actions_access_entry_arn" {
+  description = "ID of the GitHub Actions EKS access entry"
+  value       = module.eks.github_actions_access_entry_arn
+}
