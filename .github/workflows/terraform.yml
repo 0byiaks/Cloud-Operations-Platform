@@ -167,7 +167,3 @@ jobs:
         env:
           TF_VAR_aws_account_id: "716769866080"
           TF_VAR_operator_email: ${{ secrets.OPERATOR_EMAIL }}
-
-      - name: Update kubeconfig
-        run: |
-            aws eks update-kubeconfig --name cop-eks-cluster --region eu-west-2
