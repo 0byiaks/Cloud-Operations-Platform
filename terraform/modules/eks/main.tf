@@ -217,6 +217,10 @@ resource "aws_eks_access_entry" "github_actions" {
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 resource "aws_eks_access_policy_association" "github_actions_admin" {
