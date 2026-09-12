@@ -66,3 +66,7 @@ output "node_role_arn" {
   description = "ARN of the node IAM role"
   value       = module.eks.node_role_arn
 }
+
+output "novacorp_api_role_arn" {
+  value = module.eks-platform.novacorp_api_role_arn
+}

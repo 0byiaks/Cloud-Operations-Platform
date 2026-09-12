@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: novacorp-frontend
+  namespace: novacorp
+spec:
+  selector:
+    app: novacorp-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: novacorp-api
+  namespace: novacorp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: novacorp-api
+  template:
+    metadata:
+      labels:
+        app: novacorp-api
+    spec:
+      serviceAccountName: novacorp-api
+      containers:
+        - name: api
+          image: 716769866080.dkr.ecr.eu-west-2.amazonaws.com/novacorp/api:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: novacorp-secrets
+                  key: db-password
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: novacorp-secrets
+                  key: jwt-secret
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: secrets-store
+              mountPath: "/mnt/secrets"
+              readOnly: true
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: novacorp-secrets

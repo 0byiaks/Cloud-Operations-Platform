@@ -31,3 +31,8 @@ app_node_desired            = 2
 platform_node_min           = 1
 platform_node_max           = 2
 platform_node_desired       = 1
+
+ecr_repository_names = [
+  "cop-frontend",
+  "cop-api"
+]
