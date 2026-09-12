@@ -104,6 +104,7 @@ resource "kubernetes_namespace" "argocd" {
   metadata {
     name = "argocd"
   }
+  depends_on = [var.access_entry_arns]
 }
 
 # =============================================
@@ -172,6 +173,7 @@ resource "helm_release" "argocd" {
   depends_on = [
     kubernetes_namespace.argocd,
     helm_release.aws_load_balancer_controller,
+    var.access_entry_arns
   ]
 }
 
@@ -200,7 +202,7 @@ resource "helm_release" "cluster_autoscaler" {
     value = aws_iam_role.cluster_autoscaler.arn
   }
 
-  depends_on = [aws_iam_role_policy.cluster_autoscaler]
+  depends_on = [aws_iam_role_policy.cluster_autoscaler, var.access_entry_arns]
 }
 
 # =============================================
@@ -234,7 +236,7 @@ resource "helm_release" "secrets_store_csi_driver_aws" {
   namespace  = "kube-system"
   version    = "0.3.8"
 
-  depends_on = [helm_release.secrets_store_csi_driver]
+  depends_on = [helm_release.secrets_store_csi_driver, var.access_entry_arns]
 }
 
 
@@ -252,4 +254,50 @@ resource "kubernetes_cluster_role_binding" "terraform_user_admin" {
     name      = "arn:aws:iam::716769866080:user/cop-terraform-user"
     api_group = "rbac.authorization.k8s.io"
   }
+  depends_on = [var.access_entry_arns]
+}
+
+
+# =============================================
+# IAM 
+# =============================================
+
+resource "aws_iam_role" "novacorp_api" {
+  name = "cop-novacorp-api-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Federated = var.oidc_provider_arn
+      }
+      Action = "sts:AssumeRoleWithWebIdentity"
+      Condition = {
+        StringEquals = {
+          "${var.oidc_issuer}:sub" = "system:serviceaccount:novacorp:novacorp-api"
+          "${var.oidc_issuer}:aud" = "sts.amazonaws.com"
+        }
+      }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "novacorp_api_secrets" {
+  name = "cop-novacorp-api-secrets-policy"
+  role = aws_iam_role.novacorp_api.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+      ]
+      Resource = [
+        "arn:aws:secretsmanager:eu-west-2:716769866080:secret:cop/novacorp/*"
+      ]
+    }]
+  })
 }

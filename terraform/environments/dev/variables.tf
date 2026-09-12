@@ -37,7 +37,7 @@ variable "domain_name" {
   description = "Root domain name"
   type        = string
 }
-
+# VPC variables
 variable "public_subnet_az1_cidr" {
   description = "Public subnet AZ1 CIDR"
   type        = string
@@ -68,6 +68,7 @@ variable "private_subnet_data_az2_cidr" {
   type        = string
 }
 
+# ASG variables
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
@@ -116,6 +117,7 @@ variable "operator_email" {
 
 }
 
+# EKS variables
 variable "cluster_name" {
   description = "EKS cluster name"
   type        = string
@@ -165,3 +167,12 @@ variable "platform_node_desired" {
   description = "Platform node desired count"
   type        = number
 }
+
+# ECR variables
+variable "ecr_repository_names" {
+  description = "List of ECR repository names to create"
+  type        = list(string)
+}
+
+
+# Secret Manager variables
