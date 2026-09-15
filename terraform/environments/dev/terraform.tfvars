@@ -36,3 +36,4 @@ ecr_repository_names = [
   "cop-frontend",
   "cop-api"
 
+]
