@@ -76,7 +76,7 @@ resource "aws_iam_role" "novacorp_github_actions" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:0byiaks/novacorp-app:*"
+            "token.actions.githubusercontent.com:sub" = "repo:0byiaks@110993470/novacorp-app@1360671913:*"
           }
         }
       }
