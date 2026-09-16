@@ -9,3 +9,5 @@ resources:
   - api/deployment.yaml
   - frontend/service.yaml
   - frontend/deployment.yaml
+  - api/hpa.yml
+  - frontend/hpa.yml
