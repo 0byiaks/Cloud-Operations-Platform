@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: novacorp-api
   namespace: novacorp
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /docs
+    alb.ingress.kubernetes.io/success-codes: "200,404"
 spec:
   selector:
     app: novacorp-api
