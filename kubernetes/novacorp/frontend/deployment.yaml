@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: 716769866080.dkr.ecr.eu-west-2.amazonaws.com/novacorp/frontend:02cd2f3f27bca099cb54cfbf0b8f456f0823c9e4
+          image: 716769866080.dkr.ecr.eu-west-2.amazonaws.com/cop-frontend:5af3984f9bf3caa6bd0eae3bdeb8adba53da177b
           ports:
             - containerPort: 80
           resources:
