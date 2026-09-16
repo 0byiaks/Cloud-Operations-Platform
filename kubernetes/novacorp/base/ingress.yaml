@@ -10,7 +10,7 @@ metadata:
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-2:716769866080:certificate/7facdf5c-9760-4088-9bcc-95097167df5b
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/subnets: subnet-0009ea10e246ef04a,subnet-0862e466a9328717f
+    alb.ingress.kubernetes.io/subnets: subnet-0ccce90d0d972fadf,subnet-05db5a11e87eda0e3
 spec:
   rules:
     - host: novacorp.titotest.co.uk
