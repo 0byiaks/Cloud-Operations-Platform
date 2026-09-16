@@ -92,3 +92,11 @@ output "github_actions_access_entry_arn" {
   description = "ID of the GitHub Actions EKS access entry"
   value       = module.eks.github_actions_access_entry_arn
 }
+
+output "public_subnet_ids" {
+  value = module.vpc.public_subnet_ids
+}
+
+output "acm_certificate_arn" {
+  value = module.acm.certificate_arn
+}
