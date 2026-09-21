@@ -201,3 +201,6 @@ jobs:
         env:
           TF_VAR_aws_account_id: "716769866080"
           TF_VAR_operator_email: ${{ secrets.OPERATOR_EMAIL }}
+          TF_VAR_operator_email: ${{ secrets.OPERATOR_EMAIL }}
+
+     
