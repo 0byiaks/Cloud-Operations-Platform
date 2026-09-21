@@ -98,5 +98,6 @@ output "public_subnet_ids" {
 }
 
 output "acm_certificate_arn" {
-  value = module.acm.certificate_arn
+  description = "ARN of the ACM certificate for titotest.co.uk"
+  value       = module.acm.acm_certificate_arn
 }

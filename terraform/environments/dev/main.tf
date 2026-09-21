@@ -178,10 +178,6 @@ resource "aws_route53_record" "apex" {
 #   id = "/cop/dev/vpc-flow-logs"
 # }
 
-import {
-  to = module.eks.aws_eks_access_entry.github_actions
-  id = "cop-eks-cluster:arn:aws:iam::716769866080:role/cop-github-actions-role"
-}
 
 module "ecr" {
   source           = "../../modules/ecr"
