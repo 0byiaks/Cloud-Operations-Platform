@@ -124,6 +124,40 @@ jobs:
         run: |
          aws eks update-kubeconfig --name cop-eks-cluster --region eu-west-2
 
+
+      - name: Wait for ArgoCD to be ready
+        if: steps.apply.outcome == 'success'
+        run: |
+           kubectl wait --for=condition=available \
+             deployment/argocd-server \
+             -n argocd \
+             --timeout=120s
+
+      - name: Bootstrap ArgoCD Application
+        if: steps.apply.outcome == 'success'
+        run: |
+          kubectl apply -f kubernetes/novacorp/argocd/application.yaml
+
+      - name: Update ingress manifest with current values
+        if: steps.apply.outcome == 'success'
+        run: |
+            # Get values from Terraform outputs
+            SUBNET_IDS=$(terraform output -raw public_subnet_ids)
+            CERT_ARN=$(terraform output -raw acm_certificate_arn)
+
+            # Update ingress.yaml with current values
+            sed -i "s|alb.ingress.kubernetes.io/subnets:.*|alb.ingress.kubernetes.io/subnets: $SUBNET_IDS|g" \
+              kubernetes/novacorp/base/ingress.yaml
+            
+            sed -i "s|alb.ingress.kubernetes.io/certificate-arn:.*|alb.ingress.kubernetes.io/certificate-arn: $CERT_ARN|g" \
+              kubernetes/novacorp/base/ingress.yaml
+
+            # Commit back to main
+             git config user.email "ci@cop.com"
+             git config user.name "COP CI"
+            git add kubernetes/novacorp/base/ingress.yaml
+            git diff --staged --quiet || git commit -m "chore: update ingress subnet and cert after apply"
+
   terraform-destroy:
     name: Terraform Destroy
     runs-on: ubuntu-latest
@@ -166,6 +200,7 @@ jobs:
         run: terraform destroy -lock-timeout=300s -auto-approve
         env:
           TF_VAR_aws_account_id: "716769866080"
+          TF_VAR_operator_email: ${{ secrets.OPERATOR_EMAIL }}
           TF_VAR_operator_email: ${{ secrets.OPERATOR_EMAIL }}
 
      

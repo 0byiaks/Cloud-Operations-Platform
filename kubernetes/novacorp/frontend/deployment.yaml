@@ -15,6 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
+          image: 716769866080.dkr.ecr.eu-west-2.amazonaws.com/cop-frontend:0863ee60a26479ae2b319688d0fdaa8281c9ff74
           image: 716769866080.dkr.ecr.eu-west-2.amazonaws.com/cop-frontend:02cd2f3f27bca099cb54cfbf0b8f456f0823c9e4
           ports:
             - containerPort: 80
@@ -25,3 +26,17 @@ spec:
             limits:
               cpu: 250m
               memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3

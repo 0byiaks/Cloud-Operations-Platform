@@ -7,13 +7,14 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-2:716769866080:certificate/YOUR_CERT_ARN
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-2:716769866080:certificate/d5b536e9-eb56-477d-8728-f1f91bd541fc
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/subnets: subnet-XXXXX,subnet-XXXXX
+    alb.ingress.kubernetes.io/subnets: subnet-0ccce90d0d972fadf,subnet-05db5a11e87eda0e3
 spec:
+  ingressClassName: alb
   rules:
-    - host: novacorp.titotest.co.uk
+    - host: titotest.co.uk
       http:
         paths:
           - path: /api

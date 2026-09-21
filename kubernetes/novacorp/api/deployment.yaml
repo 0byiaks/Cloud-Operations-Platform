@@ -16,6 +16,7 @@ spec:
       serviceAccountName: novacorp-api
       containers:
         - name: api
+          image: 716769866080.dkr.ecr.eu-west-2.amazonaws.com/cop-api:0863ee60a26479ae2b319688d0fdaa8281c9ff74
           image: 716769866080.dkr.ecr.eu-west-2.amazonaws.com/cop-api:02cd2f3f27bca099cb54cfbf0b8f456f0823c9e4
           ports:
             - containerPort: 8000
@@ -37,6 +38,20 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
           volumeMounts:
             - name: secrets-store
               mountPath: "/mnt/secrets"

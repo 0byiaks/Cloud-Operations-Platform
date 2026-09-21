@@ -275,8 +275,8 @@ resource "aws_iam_role" "novacorp_api" {
       Action = "sts:AssumeRoleWithWebIdentity"
       Condition = {
         StringEquals = {
-          "${var.oidc_issuer}:sub" = "system:serviceaccount:novacorp:novacorp-api"
-          "${var.oidc_issuer}:aud" = "sts.amazonaws.com"
+          "${replace(var.oidc_issuer, "https://", "")}:sub" = "system:serviceaccount:novacorp:novacorp-api"
+          "${replace(var.oidc_issuer, "https://", "")}:aud" = "sts.amazonaws.com"
         }
       }
     }]
