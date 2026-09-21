@@ -7,11 +7,10 @@ on:
       - main
     paths:
       - 'terraform/**'
+      - '.github/workflows/terraform.yml'
   push:
     branches:
       - develop
-    paths:
-      - 'terraform/**'
   workflow_dispatch:
     inputs:
       confirm_destroy:
