@@ -151,8 +151,12 @@ module "eks-platform" {
 
 }
 
-# Apex DNS for the NovaCorp Ingress ALB (titotest.co.uk)
-data "aws_lb" "novacorp_ingress" {
+# Apex DNS for the NovaCorp Ingress ALB (titotest.co.uk).
+# The ALB is created by the AWS Load Balancer Controller after ArgoCD
+# syncs the Ingress — not by this stack — so plan must succeed when
+# zero ALBs match. Route53 is created on a later apply once exactly
+# one Ingress ALB exists.
+data "aws_lbs" "novacorp_ingress" {
   tags = {
     "elbv2.k8s.aws/cluster" = var.cluster_name
     "ingress.k8s.aws/stack" = "novacorp/novacorp-ingress"
@@ -161,16 +165,27 @@ data "aws_lb" "novacorp_ingress" {
   depends_on = [module.eks-platform]
 }
 
+data "aws_lb" "novacorp_ingress" {
+  count = length(data.aws_lbs.novacorp_ingress.arns) == 1 ? 1 : 0
+  arn   = one(data.aws_lbs.novacorp_ingress.arns)
+}
+
 resource "aws_route53_record" "apex" {
+  count   = length(data.aws_lb.novacorp_ingress) == 1 ? 1 : 0
   zone_id = data.aws_route53_zone.main.zone_id
   name    = var.domain_name
   type    = "A"
 
   alias {
-    name                   = data.aws_lb.novacorp_ingress.dns_name
-    zone_id                = data.aws_lb.novacorp_ingress.zone_id
+    name                   = data.aws_lb.novacorp_ingress[0].dns_name
+    zone_id                = data.aws_lb.novacorp_ingress[0].zone_id
     evaluate_target_health = false
   }
+}
+
+moved {
+  from = aws_route53_record.apex
+  to   = aws_route53_record.apex[0]
 }
 
 # import {
