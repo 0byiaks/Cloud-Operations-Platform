@@ -94,7 +94,8 @@ output "github_actions_access_entry_arn" {
 }
 
 output "public_subnet_ids" {
-  value = module.vpc.public_subnet_ids
+  description = "Comma-separated public subnet IDs for the Ingress ALB annotation"
+  value       = join(",", module.vpc.public_subnet_ids)
 }
 
 output "acm_certificate_arn" {
