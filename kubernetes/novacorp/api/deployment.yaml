@@ -1,4 +1,3 @@
-cat > kubernetes/novacorp/api/deployment.yaml << 'EOF'
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -64,4 +63,3 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: novacorp-secrets
-EOF

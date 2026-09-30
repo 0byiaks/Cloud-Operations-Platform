@@ -1,4 +1,3 @@
-cat > kubernetes/novacorp/frontend/deployment.yaml << 'EOF'
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -41,4 +40,3 @@ spec:
             initialDelaySeconds: 3
             periodSeconds: 5
             failureThreshold: 3
-EOF
