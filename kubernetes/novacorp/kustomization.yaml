@@ -15,7 +15,7 @@ resources:
   - api/deployment.yaml
   - api/service.yaml
   - api/service-account.yaml
-  - api/hpa.yaml
+  - api/hpa.yml
   - frontend/deployment.yaml
   - frontend/service.yaml
-  - frontend/hpa.yaml
+  - frontend/hpa.yml
