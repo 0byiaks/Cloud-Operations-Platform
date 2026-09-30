@@ -35,4 +35,5 @@ platform_node_desired       = 1
 ecr_repository_names = [
   "cop-frontend",
   "cop-api"
+
 ]

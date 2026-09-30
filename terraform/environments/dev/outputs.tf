@@ -3,10 +3,10 @@ output "vpc_id" {
   value       = module.vpc.vpc_id
 }
 
-output "novacorp_ingress_alb_dns_name" {
-  description = "DNS name of the NovaCorp Ingress ALB"
-  value       = data.aws_lb.novacorp_ingress.dns_name
-}
+#output "novacorp_ingress_alb_dns_name" {
+#  description = "DNS name of the NovaCorp Ingress ALB (null until the Ingress ALB exists)"
+#  value       = try(data.aws_lb.novacorp_ingress[0].dns_name, null)
+#}
 
 # Legacy EC2/ALB outputs — uncomment with the EC2 stack in main.tf
 # output "alb_dns_name" {
@@ -94,9 +94,11 @@ output "github_actions_access_entry_arn" {
 }
 
 output "public_subnet_ids" {
-  value = module.vpc.public_subnet_ids
+  description = "Comma-separated public subnet IDs for the Ingress ALB annotation"
+  value       = join(",", module.vpc.public_subnet_ids)
 }
 
 output "acm_certificate_arn" {
-  value = module.acm.certificate_arn
+  description = "ARN of the ACM certificate for titotest.co.uk"
+  value       = module.acm.acm_certificate_arn
 }

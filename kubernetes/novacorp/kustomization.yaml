@@ -5,6 +5,13 @@ resources:
   - base/namespace.yaml
   - base/secret-store.yaml
   - base/ingress.yaml
+  - api/service-account.yaml
+  - api/service.yaml
+  - api/deployment.yaml
+  - api/hpa.yml
+  - frontend/service.yaml
+  - frontend/deployment.yaml
+  - frontend/hpa.yml
   - api/deployment.yaml
   - api/service.yaml
   - api/service-account.yaml
