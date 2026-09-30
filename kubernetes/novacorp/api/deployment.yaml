@@ -16,7 +16,7 @@ spec:
       serviceAccountName: novacorp-api
       containers:
         - name: api
-          image: 716769866080.dkr.ecr.eu-west-2.amazonaws.com/cop-api:98ef51baaa7cbfd93e745b37c972d3fcf178642d
+          image: 716769866080.dkr.ecr.eu-west-2.amazonaws.com/cop-api:d0f5fe0a1c451ccf722ed55c428a877d24873165
           ports:
             - containerPort: 8000
           env:
