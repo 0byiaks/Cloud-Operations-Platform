@@ -211,10 +211,10 @@ module "ecr" {
 module "database" {
   source = "../../modules/database"
 
-  project_name = var.project_name
-  environment  = var.environment
-  vpc_id       = module.vpc.vpc_id
-  subnet_ids   = module.vpc.private_app_subnet_ids
+  project_name               = var.project_name
+  environment                = var.environment
+  vpc_id                     = module.vpc.vpc_id
+  subnet_ids                 = module.vpc.private_app_subnet_ids
   eks_node_security_group_id = module.eks.node_security_group_id
-  db_name = var.db_name
+  db_name                    = var.db_name
 }
