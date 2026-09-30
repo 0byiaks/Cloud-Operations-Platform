@@ -3,10 +3,10 @@ output "vpc_id" {
   value       = module.vpc.vpc_id
 }
 
-output "novacorp_ingress_alb_dns_name" {
-  description = "DNS name of the NovaCorp Ingress ALB (null until the Ingress ALB exists)"
-  value       = try(data.aws_lb.novacorp_ingress[0].dns_name, null)
-}
+#output "novacorp_ingress_alb_dns_name" {
+#  description = "DNS name of the NovaCorp Ingress ALB (null until the Ingress ALB exists)"
+#  value       = try(data.aws_lb.novacorp_ingress[0].dns_name, null)
+#}
 
 # Legacy EC2/ALB outputs — uncomment with the EC2 stack in main.tf
 # output "alb_dns_name" {
