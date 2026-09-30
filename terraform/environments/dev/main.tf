@@ -158,12 +158,12 @@ module "eks-platform" {
 # one Ingress ALB exists.
 
 #data "aws_lbs" "novacorp_ingress" {
-  tags = {
-    "elbv2.k8s.aws/cluster" = var.cluster_name
-    "ingress.k8s.aws/stack" = "novacorp/novacorp-ingress"
-  }
+#  tags = {
+#    "elbv2.k8s.aws/cluster" = var.cluster_name
+#    "ingress.k8s.aws/stack" = "novacorp/novacorp-ingress"
+#  }
 
-  depends_on = [module.eks-platform]
+#  depends_on = [module.eks-platform]
 #}
 
 #data "aws_lb" "novacorp_ingress" {
