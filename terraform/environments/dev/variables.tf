@@ -175,4 +175,9 @@ variable "ecr_repository_names" {
 }
 
 
+
+variable "db_name" {
+  description = "Database name"
+  type        = string
+}
 # Secret Manager variables
