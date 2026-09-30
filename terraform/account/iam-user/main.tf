@@ -142,6 +142,14 @@ resource "aws_iam_policy" "cop_terraform_policy" {
           "events:*"
         ]
         Resource = "*"
+      },
+      {
+        Sid    = "RDSPermissions"
+        Effect = "Allow"
+        Action = [
+          "rds:*"
+        ]
+        Resource = "*"
       }
     ]
   })
