@@ -187,7 +187,7 @@ resource "aws_route53_record" "apex" {
 moved {
   from = aws_route53_record.apex
   to   = aws_route53_record.apex[0]
-  }
+}
 
 # import {
 #   to = module.monitoring.aws_cloudwatch_log_group.vpc_flow_logs
